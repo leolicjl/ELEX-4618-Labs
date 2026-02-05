@@ -345,11 +345,13 @@ void lab3()
             while (true)
             {
                 cc.ensure_connected();
+
                 if (!cc.is_connected())
                 {
-                    Sleep(200);
+                    Sleep(50);
                     continue;
                 }
+
                 if (!cc.get_analog(joystick_x, joystick_y))
                 {
                     Sleep(50);
@@ -374,9 +376,10 @@ void lab3()
             while (true)
             {
                 cc.ensure_connected();
+
                 if (!cc.is_connected())
                 {
-                    Sleep(200);
+                    Sleep(50);
                     continue;
                 }
 
@@ -385,8 +388,10 @@ void lab3()
                     Sleep(50);
                     continue;
                 }
+
                 channel_Num = cc.get_last_channel();
                 cout << "DIGITAL TEST: CH" << channel_Num << " = " << button_SW1 << endl;
+
                 if (button_SW1 == 1)
                     cc.set_data(cc.DIGITAL, GREEN_LED, 0);
                 else 
@@ -400,30 +405,30 @@ void lab3()
             int pressed_Count = 0;
             int last_State = 1;
             int state;
-           
+
             while (true)
             {
                 cc.ensure_connected();
+
                 if (!cc.is_connected())
                 {
-                    Sleep(200);
+                    Sleep(50);
                     continue;
                 }
 
                 if (!cc.get_button(state))
                 {
-                    Sleep(50);
                     continue;
                 }
 
                 if (last_State == 1 && state == 0)
                 {
                     pressed_Count++;
-                    cout << "BUTTON TEST: " << pressed_Count << endl;
+                    cout << "BUTTON TEST: " << pressed_Count << "\n";
                 }
                 last_State = state;
 
-                Sleep(5);
+                //Sleep(0.5);
             }
         }
 
@@ -435,9 +440,10 @@ void lab3()
             while (true)
             {
                 cc.ensure_connected();
-                if(!cc.is_connected())
+
+                if (!cc.is_connected())
                 {
-                    Sleep(200);
+                    Sleep(50);
                     continue;
                 }
 
@@ -476,35 +482,84 @@ void lab3()
 ////////////////////////////////////////////////////////////////
 void lab4()
 {
-    int joystick_x, joystick_y;
+    using namespace cv;
+    int joystick_x, joystick_y, lcd_x, lcd_y;
+    int state = 0;
+    int last_State = 1;
+
+    Scalar colors[] = { Scalar(255,0,0), Scalar(0,255,0),  Scalar(0,0,255) };
+    int colorIndex = 0;
+    Scalar currentColor = colors[colorIndex];
 
     CControl cc;
 
     cc.init_com();
 
+    Mat canvas(250, 250, CV_8UC3, Scalar(255,255,255));
+
+    // initialize GUI system
+    cvui::init("Etch-A-sketch");
+
+    cv::Point gui_position;
+    gui_position = cv::Point(10, 2);
+     
+    cvui::window(canvas, gui_position.x, gui_position.y, 120, 40, "Etch-A-Sketch");
+    
+    Point prev_point(-1, -1);
+
     while (true)
     {
         cc.ensure_connected();
+
         if (!cc.is_connected())
         {
-            Sleep(200);
+            Sleep(50);
             continue;
         }
 
+        if (cvui::button(canvas, 20, 40, 200, 30, "Exit"))
+            break;
+
         if (!cc.get_analog(joystick_x, joystick_y))
         {
-            Sleep(50);
+            Sleep(1);
         }
-        cout << fixed << setprecision(1) << joystick_y << " " << joystick_x << endl;
 
-        cv::Mat im;
+        if (cc.get_button(state))
+        {
 
-        // initialize GUI system
-        cvui::init(CANVAS_NAME);
+            if (last_State == 1 && state == 0)
+            {
+                if (colorIndex < 2)
+                    colorIndex++;
+                else
+                    colorIndex = 0;
 
-        Sleep(20);
+                currentColor = colors[colorIndex];
+            }
+
+            last_State = state;
+
+        }
+
+        lcd_x = RATIO * joystick_x;
+        lcd_y = RATIO * joystick_y;
+
+        Point current_Point(lcd_x, lcd_y);
+
+        if (prev_point.x == -1) {
+            prev_point = current_Point;                 
+        }
+        else {
+            line(canvas, prev_point, current_Point, currentColor, 1, LINE_AA);
+            prev_point = current_Point; 
+        }
+
+        gui_position = Point(12, 25);
+        cvui::text(canvas, gui_position.x, gui_position.y, "Color = " + to_string(colorIndex));
+        cvui::update();
+        imshow("Etch-A-Sketch", canvas);
     }
-
 
 }
 ////////////////////////////////////////////////////////////////

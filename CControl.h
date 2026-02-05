@@ -18,6 +18,8 @@ Description: Header file for CControl.cpp
 #define JOYX_CHANNEL 11
 #define SW1_CHANNEL 33
 #define	SERVO_CHANNEL 0
+//Lab 4 defines
+#define RATIO (250.0f) / (4095.0f) //conversion to amount of pixels on LCD
 
 using namespace std;
 
@@ -38,6 +40,7 @@ private:
 	int _channel_x; ///<analog channel of joystick x
 	int _channel_y; ///<analog channel of joystick y
 	string _active_port; ///<selected com port
+
 
 	/**
 	 * @brief Makes sure both PC and controller communicates with each other

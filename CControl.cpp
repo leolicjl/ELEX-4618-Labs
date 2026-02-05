@@ -70,7 +70,7 @@ bool CControl::try_connect_on_port(const std::string& portName)
     if (!_com.open(winPort.c_str()))
         return false;
 
-    Sleep(250);
+    Sleep(200);
     _com.flush();
 
     if (!handshake_ok())
@@ -102,6 +102,13 @@ void CControl::init_com()
 
 void CControl::ensure_connected()
 {
+    static double last_scan_time = 0;
+    double now = cv::getTickCount();
+    double elapsed = (now - last_scan_time) / cv::getTickFrequency();
+
+    // If currently disconnected, don't rescan too often
+    const double scan_period = 0.10; // 100 ms (tune: 0.05 to 0.20)
+
     if (is_connected())
     {
         if (handshake_ok())
@@ -110,7 +117,14 @@ void CControl::ensure_connected()
         std::cout << "Device disconnected. Rescanning..." << std::endl;
         _com.close();
         _active_port.clear();
+
+        last_scan_time = 0;
     }
+
+    if (elapsed < scan_period)
+        return;
+
+    last_scan_time = now;
 
     for (const auto& port : list_candidate_ports())
     {
@@ -134,7 +148,6 @@ bool CControl::get_data(int type, int channel, int &result)
     // Send TX string
     if (!_com.write(tx_str.c_str(), tx_str.length()))
         return false;
-    Sleep(10); // wait for ADC conversion, etc. May not be needed?
 
     rx_str = "";
     // start timeout count
@@ -204,7 +217,7 @@ bool CControl::get_button(int &dig_input)
         last_time = current_time;
     }
 
-    if ((current_time - last_time) / cv::getTickFrequency() >= 0.01)
+    if ((current_time - last_time) / cv::getTickFrequency() >= 0.003)
         stable = last_state;
 
     dig_input = stable;
