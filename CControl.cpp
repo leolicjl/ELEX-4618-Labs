@@ -13,9 +13,6 @@ Notes: 11 for joystick x, 4 for joystick y, 0-3 for servo, 5 6 7 accelerometer,
 
 #include <windows.h>
 
-// --------------------------
-// Helpers (local to this .cpp)
-// --------------------------
 static std::vector<std::string> list_candidate_ports()
 {
     std::vector<std::string> ports;
@@ -25,7 +22,7 @@ static std::vector<std::string> list_candidate_ports()
     return ports;
 }
 
-// Win32 needs "\\\\.\\COM10" format for COM10+
+// Win32 needs "\\\\.\\COM10" 
 static std::string normalize_windows_port_name(const std::string& port)
 {
     if (port.rfind("COM", 0) == 0)
@@ -56,23 +53,16 @@ bool CControl::is_connected()
     return _com.is_open();
 }
 
-// Handshake: uses an existing "safe" GET that should always respond on your board.
-// If your board resets on open, we allow a short delay before calling this.
 bool CControl::handshake_ok()
 {
     int tmp = 0;
 
-    // Use a read that is unlikely to change anything.
-    // DIGITAL SW1 is active-low, but reading it is safe.
-    // You can swap this to JOYX_CHANNEL analog read if you prefer.
     if (!get_data(DIGITAL, SW1_CHANNEL, tmp))
         return false;
 
     return true;
 }
 
-// Try open + handshake on a single port.
-// Returns true if this is the microcontroller.
 bool CControl::try_connect_on_port(const std::string& portName)
 {
     std::string winPort = normalize_windows_port_name(portName);
@@ -80,10 +70,7 @@ bool CControl::try_connect_on_port(const std::string& portName)
     if (!_com.open(winPort.c_str()))
         return false;
 
-    // Many boards reset when the port is opened; give it a moment.
     Sleep(250);
-
-    // Clear junk from boot messages
     _com.flush();
 
     if (!handshake_ok())
@@ -97,11 +84,8 @@ bool CControl::try_connect_on_port(const std::string& portName)
     return true;
 }
 
-// Auto-detect the board by scanning all COM ports.
-// This call will BLOCK until the device is found.
 void CControl::init_com()
 {
-    // If already connected, keep it
     if (is_connected())
         return;
 
@@ -112,29 +96,22 @@ void CControl::init_com()
             if (try_connect_on_port(port))
                 return;
         }
-
-        // Not found: wait then scan again
-        Sleep(250);
+        Sleep(150);
     }
 }
 
-// Call this periodically while running.
-// If disconnected, it will attempt to rescan and reconnect (non-blocking per call).
 void CControl::ensure_connected()
 {
-    // If connected, validate connection with a quick handshake.
     if (is_connected())
     {
         if (handshake_ok())
             return;
 
-        // If handshake failed, assume unplugged.
         std::cout << "Device disconnected. Rescanning..." << std::endl;
         _com.close();
         _active_port.clear();
     }
 
-    // Not connected: try one scan pass
     for (const auto& port : list_candidate_ports())
     {
         if (try_connect_on_port(port))
@@ -146,6 +123,7 @@ bool CControl::get_data(int type, int channel, int &result)
 {
     if (!is_connected())
         return false;
+
     _com.flush();
     string tx_str = "G " + to_string(type) + " " + to_string(channel) + "\n";
     string rx_str;
@@ -188,6 +166,7 @@ bool CControl::set_data(int type, int channel, int val)
 {
     if (!is_connected())
         return false;
+
     _com.flush();
     string tx_str = "S " + to_string(type) + " " + to_string(channel) + " " + to_string(val) + "\n";
     if(!_com.write(tx_str.c_str(), tx_str.length()))

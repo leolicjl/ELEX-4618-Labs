@@ -29,11 +29,40 @@ public:
 
 	virtual ~Serial();
 
+	/**
+	 * @brief Opens and configures a serial communication port.
+	 *
+	 * Attempts to establish a connection to the specified COM port using
+	 * the provided baud rate and default serial parameters (8 data bits,
+	 * no parity, 1 stop bit).
+	 *
+	 * @param commPortName Name of the COM port (e.g., "COM5").
+	 * @param bitRate Communication baud rate. Default is 115200.
+	 *
+	 * @return bool True if the port was successfully opened and configured,
+	 *              false otherwise.
+	 */
 	bool open (std::string commPortName, int bitRate = 115200);
+
+	/**
+	 * @brief Closes the currently open serial port.
+	 *
+	 * Safely releases the operating system handle associated with the
+	 * serial port. If the port is not open, the function does nothing.
+	 */
 	void close();
+
+	/**
+	 * @brief Checks whether the serial port is currently open.
+	 *
+	 * Determines if a valid communication handle exists for the port.
+	 *
+	 * @return bool True if the serial port is open and ready for use,
+	 *              false otherwise.
+	 */
 	bool is_open();
 
-  /** Writes a string of bytes to the serial port.
+	/** Writes a string of bytes to the serial port.
 	 *
 	 * @param buffer pointer to the buffer containing the bytes
 	 * @param buffLen the number of bytes in the buffer
@@ -51,6 +80,11 @@ public:
 	 */
 	int read(char *buffer, int buffLen);
 
-	// Flushes everything from the serial port's read buffer
+	/**
+	 * @brief Clears the serial port receive buffer.
+	 *
+	 * Reads and discards any remaining data currently waiting in the
+	 * serial input buffer to ensure future reads start with fresh data.
+	 */
 	void flush();
 };

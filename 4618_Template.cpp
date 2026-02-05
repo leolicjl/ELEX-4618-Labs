@@ -354,6 +354,7 @@ void lab3()
                 {
                     Sleep(50);
                 }
+
                 channel_Num_X = cc.get_channel_x();
                 percent_x = joystick_x / 4096.0f * 100.0f;
 
@@ -475,8 +476,37 @@ void lab3()
 ////////////////////////////////////////////////////////////////
 void lab4()
 {
-}
+    int joystick_x, joystick_y;
 
+    CControl cc;
+
+    cc.init_com();
+
+    while (true)
+    {
+        cc.ensure_connected();
+        if (!cc.is_connected())
+        {
+            Sleep(200);
+            continue;
+        }
+
+        if (!cc.get_analog(joystick_x, joystick_y))
+        {
+            Sleep(50);
+        }
+        cout << fixed << setprecision(1) << joystick_y << " " << joystick_x << endl;
+
+        cv::Mat im;
+
+        // initialize GUI system
+        cvui::init(CANVAS_NAME);
+
+        Sleep(20);
+    }
+
+
+}
 ////////////////////////////////////////////////////////////////
 // Lab 5
 ////////////////////////////////////////////////////////////////

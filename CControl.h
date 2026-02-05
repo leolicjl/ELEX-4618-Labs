@@ -37,11 +37,22 @@ private:
 	int _last_channel; ///<stores last channel number from from get_data()
 	int _channel_x; ///<analog channel of joystick x
 	int _channel_y; ///<analog channel of joystick y
-	string _active_port;
+	string _active_port; ///<selected com port
 
-
+	/**
+	 * @brief Makes sure both PC and controller communicates with each other
+	 *
+	 * @param none
+	 * @return true/false
+	 */
 	bool handshake_ok();
 
+	/**
+	 * @brief Try open + handshake on a single port
+	 *
+	 * @param portName Constant string reference variable
+	 * @return true if this is the controller
+	 */
 	bool try_connect_on_port(const string& portName);
 
 public:
@@ -64,7 +75,7 @@ public:
 	 * Opens the specified COM port and prepares it for communication
 	 * with the embedded system.
 	 *
-	 * @param comport COM port number to open 
+	 * @param none
 	 * @return none
 	 */
 	void init_com();
@@ -141,8 +152,22 @@ public:
 	*/
 	int get_channel_y(void);
 
+	/**
+	* @brief Helper function to see if com port has been opened and connected. 
+	*
+	* @param none
+	* @return true
+	*/
 	bool is_connected(void);
 
+	/**
+	* @brief Function to be periodically called to check com is still connected. 
+	* 
+	* If disconnected, it will attempt to re-scan and re-connect. 
+	*
+	* @param none
+	* @return true
+	*/
 	void ensure_connected();
 
 };
