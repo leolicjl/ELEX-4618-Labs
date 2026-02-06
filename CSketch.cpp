@@ -38,7 +38,7 @@ void CSketch::gpio()
 		return;
 	}
 
-	if (!cc.get_analog(_joystick_x, _joystick_y))
+	if (!cc.get_analog(_joystick, _accel))
 	{
 		Sleep(1);
 	}
@@ -106,8 +106,8 @@ void CSketch::update()
 	_last_state_SW2 = _state_SW2;
 
 
-	float nx = ((float)_joystick_x - _center_x) / 2047.0f;
-	float ny = (_center_y - (float)_joystick_y) / 2047.0f;
+	float nx = ((float)_joystick.x- _center_x) / 2047.0f;
+	float ny = (_center_y - (float)_joystick.y) / 2047.0f;
 
 	nx = max(-1.0f, min(nx, 1.0f));
 	ny = max(-1.0f, min(ny, 1.0f));
@@ -128,12 +128,12 @@ void CSketch::update()
 	float sx = (m > 1e-6f) ? (r * cos(a) / m) : 0.0f;
 	float sy = (m > 1e-6f) ? (r * sin(a) / m) : 0.0f;
 
-	_lcd_x = (int)((sx * 0.5f + 0.5f) * (_canvas.cols - 1));
-	_lcd_y = (int)((sy * 0.5f + 0.5f) * (_canvas.rows - 1));
+	_lcd.x = (int)((sx * 0.5f + 0.5f) * (_canvas.cols - 1));
+	_lcd.y = (int)((sy * 0.5f + 0.5f) * (_canvas.rows - 1));
 
 
-	_lcd_x = std::max(0, std::min(_lcd_x, _canvas.cols - 1));
-	_lcd_y = std::max(0, std::min(_lcd_y, _canvas.rows - 1));
+	_lcd.x = std::max(0, std::min(_lcd.x, _canvas.cols - 1));
+	_lcd.y = std::max(0, std::min(_lcd.y, _canvas.rows - 1));
 }
 
 void CSketch::draw()
@@ -141,7 +141,7 @@ void CSketch::draw()
 	if (!cc.is_connected())
 		return;
 
-	Point _current_point(_lcd_x, _lcd_y);
+	Point _current_point(_lcd.x, _lcd.y);
 
 	if (_prev_point.x == -1) {
 		_prev_point = _current_point;
@@ -164,6 +164,16 @@ void CSketch::draw()
 		cvui::text(_canvas, 12, 10, "Color = " + _color_text);
 	}
 
+	if ((_accel.x > ACCEL_CENTERX + ACCEL_MIN_SHAKE) || 
+		(_accel.x < ACCEL_CENTERX - ACCEL_MIN_SHAKE) || 
+		(_accel.y > ACCEL_CENTERY + ACCEL_MIN_SHAKE) || 
+		(_accel.y < ACCEL_CENTERY - ACCEL_MIN_SHAKE))
+	{
+		_canvas.setTo(Scalar(0, 0, 0));
+		_prev_point = Point(-1, -1);
+		cvui::text(_canvas, 12, 10, "Color = " + _color_text);
+	}
+
 	if (_prev_color != _color_index)
 	{
 		Rect ui_bar(0, 0, _canvas.cols, 20);
@@ -171,7 +181,6 @@ void CSketch::draw()
 		cvui::text(_canvas, 12, 10, "Color = " + _color_text);
 		_prev_color = _color_index;
 	}
-
 	cvui::update();
 	imshow("Etch-A-Sketch", _canvas);
 

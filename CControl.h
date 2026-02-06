@@ -21,6 +21,9 @@ Description: Header file for CControl.cpp
 #define SW1_CHANNEL 33
 #define SW2_CHANNEL 32
 #define	SERVO_CHANNEL 0
+#define ACCX_CHANNEL 7
+#define ACCY_CHANNEL 6
+#define ACCZ_CHANNEL 5
 //Lab 4 defines
 #define RATIO (250.0f) / (4095.0f) //conversion to amount of pixels on LCD
 
@@ -117,11 +120,11 @@ public:
 	 * Calls get_data() internally and converts the 12-bit ADC result
 	 * to a floating-point value between 0.0 and 1.0.
 	 *
-	 * @param x Reference variable ADC joystick x
-	 * @param y Reference variable ADC Joystick y
+	 * @param joy Point reference variable for joystick
+	 * @param accel Point reference variable for accelerometer
 	 * @return true if succeeded.
 	 */
-	bool get_analog(int &x, int &y);
+	bool get_analog(cv::Point &joy, cv::Point &accel);
 
 	/**
 	 * @brief Reads and debounces a digital button input.

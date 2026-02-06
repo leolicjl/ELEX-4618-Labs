@@ -331,7 +331,9 @@ void lab3()
 
     cc.init_com();
 
-    int user_Input, channel_Num_X, channel_Num_Y, joystick_x, joystick_y;
+    int user_Input, channel_Num_X, channel_Num_Y;
+    Point joystick;
+    Point accelerometer;
     int button_SW1, channel_Num;
     float percent_x, percent_y;
 
@@ -353,20 +355,20 @@ void lab3()
                     continue;
                 }
 
-                if (!cc.get_analog(joystick_x, joystick_y))
+                if (!cc.get_analog(joystick, accelerometer))
                 {
                     Sleep(50);
                 }
 
                 channel_Num_X = cc.get_channel_x();
-                percent_x = joystick_x / 4096.0f * 100.0f;
+                percent_x = joystick.x / 4096.0f * 100.0f;
 
                 channel_Num_Y = cc.get_channel_y();
-                percent_y = joystick_y / 4096.0f * 100.0f;
+                percent_y = joystick.y / 4096.0f * 100.0f;
 
                 cout << fixed << setprecision(1);
-                cout << "ANALOG TEST: CH" << channel_Num_X << "=" << joystick_x << "(" << percent_x << "%)";
-                cout << " CH" << channel_Num_Y << "=" << joystick_y << "(" << percent_y << "%)" << endl;
+                cout << "ANALOG TEST: CH" << channel_Num_X << "=" << joystick.x << "(" << percent_x << "%)";
+                cout << " CH" << channel_Num_Y << "=" << joystick.y << "(" << percent_y << "%)" << endl;
 
                 Sleep(20);
             }

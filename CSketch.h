@@ -10,6 +10,9 @@ Description: Header file for CSketch.cpp
 #define WINDOW_SIZE 250
 #define RATIO (250.0f) / (4095.0f)
 #define LINE_THICKNESS 1
+#define ACCEL_CENTERX 3712
+#define ACCEL_CENTERY 2116
+#define ACCEL_MIN_SHAKE 300
 
 using namespace cv;
 
@@ -26,7 +29,9 @@ using namespace cv;
 class CSketch : public CBase4618
 {
 private:
-	int _joystick_x, _joystick_y, _lcd_x, _lcd_y; ///< joystick x and y, converted lcd x y coordinates
+	Point _joystick; ///< stores coordinates of joystick
+	Point _lcd; ///<stores coordinates of lcd
+	Point _accel; ///<stores coordinates of accelerometer
 	int _state_SW1 = 0; ///< stores current button 1 state
 	int _last_state_SW1 = 1; ///< stores last button 1 state
 	int _state_SW2 = 0; ///< stores current button 2 state

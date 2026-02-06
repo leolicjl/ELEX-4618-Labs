@@ -11,6 +11,7 @@ Notes: 11 for joystick x, 4 for joystick y, 0-3 for servo, 5 6 7 accelerometer,
 #include "stdafx.h"
 #include "CControl.h"
 
+
 #include <windows.h>
 
 static std::vector<std::string> list_candidate_ports()
@@ -188,14 +189,30 @@ bool CControl::set_data(int type, int channel, int val)
     return true;
 }
 
-bool CControl::get_analog(int &x, int &y)
+bool CControl::get_analog(cv::Point &joy, cv::Point &accel)
 {
+    int x = 0;
+    int y = 0;
+
     if (!get_data(ANALOG, JOYX_CHANNEL, x))
         return false;
     _channel_x = _last_channel;
     if (!get_data(ANALOG, JOYY_CHANNEL, y))
         return false;
     _channel_y = _last_channel;
+
+    joy.x = x;
+    joy.y = y;
+
+    if (!get_data(ANALOG, ACCX_CHANNEL, x))
+        return false;
+
+    if (!get_data(ANALOG, ACCY_CHANNEL, y))
+        return false;
+
+    accel.x = x;
+    accel.y = y;
+
     return true;
 }
 
