@@ -14,9 +14,9 @@ Description:
 CSketch::CSketch(Size &canvas_size)
 {
 	cc.init_com();
-	_canvas = Mat(canvas_size, CV_8UC3, Scalar(255,255,255));
+	_canvas = Mat(canvas_size, CV_8UC3, Scalar(0,0,0));
 	cvui::init("Etch-A-Sketch");
-	cvui::text(_canvas, 12, 25, "Color = " + _color_text);
+	cvui::text(_canvas, 12, 10, "Color = " + _color_text);
 	cc.set_data(cc.DIGITAL, BLUE_LED, 1);
 	Sleep(2);
 	cc.set_data(cc.DIGITAL, GREEN_LED, 0);
@@ -98,16 +98,42 @@ void CSketch::update()
 
 	if (_last_state_SW2 == 1 && _state_SW2 == 0)
 	{
-		_canvas.setTo(Scalar(255, 255, 255));
+		_canvas.setTo(Scalar(0, 0, 0));
 		_prev_point = Point(-1, -1);
-		cvui::text(_canvas, 12, 25, "Color = " + _color_text);
+		cvui::text(_canvas, 12, 10, "Color = " + _color_text);
 	}
 
 	_last_state_SW2 = _state_SW2;
 
-	_lcd_x = RATIO * _joystick_x;
-	_lcd_y = RATIO * _joystick_y;
 
+	float nx = ((float)_joystick_x - _center_x) / 2047.0f;
+	float ny = (_center_y - (float)_joystick_y) / 2047.0f;
+
+	nx = max(-1.0f, min(nx, 1.0f));
+	ny = max(-1.0f, min(ny, 1.0f));
+
+	float r = sqrt(nx*nx + ny*ny);
+	if (r > 1.0f)
+	{
+		nx /= r;
+		ny /= r;
+		r = 1.0f;
+	}
+
+	float a = atan2(ny, nx);
+	float c = fabs(cos(a));
+	float s = fabs(sin(a));
+	float m = (c > s) ? c : s;    
+
+	float sx = (m > 1e-6f) ? (r * cos(a) / m) : 0.0f;
+	float sy = (m > 1e-6f) ? (r * sin(a) / m) : 0.0f;
+
+	_lcd_x = (int)((sx * 0.5f + 0.5f) * (_canvas.cols - 1));
+	_lcd_y = (int)((sy * 0.5f + 0.5f) * (_canvas.rows - 1));
+
+
+	_lcd_x = std::max(0, std::min(_lcd_x, _canvas.cols - 1));
+	_lcd_y = std::max(0, std::min(_lcd_y, _canvas.rows - 1));
 }
 
 void CSketch::draw()
@@ -125,24 +151,24 @@ void CSketch::draw()
 		_prev_point = _current_point;
 	}
 
-	if (cvui::button(_canvas, 20, 80, 200, 30, "Exit"))
+	if (cvui::button(_canvas, 20, 80, 40, 30, "Exit"))
 	{
 		request_quit();
 		return;
 	}
 
-	if (cvui::button(_canvas, 20, 40, 200, 30, "Reset"))
+	if (cvui::button(_canvas, 20, 40, 40, 30, "Reset"))
 	{
-		_canvas.setTo(Scalar(255,255,255));
+		_canvas.setTo(Scalar(0,0,0));
 		_prev_point = Point(-1, -1);
-		cvui::text(_canvas, 12, 25, "Color = " + _color_text);
+		cvui::text(_canvas, 12, 10, "Color = " + _color_text);
 	}
 
 	if (_prev_color != _color_index)
 	{
-		Rect ui_bar(0, 0, _canvas.cols, 35);
-		_canvas(ui_bar).setTo(Scalar(255, 255, 255));
-		cvui::text(_canvas, 12, 25, "Color = " + _color_text);
+		Rect ui_bar(0, 0, _canvas.cols, 20);
+		_canvas(ui_bar).setTo(Scalar(0, 0, 0));
+		cvui::text(_canvas, 12, 10, "Color = " + _color_text);
 		_prev_color = _color_index;
 	}
 

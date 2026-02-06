@@ -10,9 +10,6 @@ Description: Header file for CSketch.cpp
 #define WINDOW_SIZE 250
 #define RATIO (250.0f) / (4095.0f)
 #define LINE_THICKNESS 1
-#define BLUE 0
-#define GREEN 1
-#define RED 2
 
 using namespace cv;
 
@@ -33,6 +30,8 @@ private:
 	int _prev_color = 0;
 	Scalar _current_color = _colors[_color_index];
 
+	const float _center_x = 2060.0f;
+	const float _center_y = 1995.0f;
 public:
 
 	CSketch(Size &canvas_size);
