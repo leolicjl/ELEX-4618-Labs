@@ -14,9 +14,12 @@ Description: Header file for CControl.cpp
 #include <regex>
 #include <fstream>
 #define GREEN_LED 38
+#define RED_LED 39
+#define BLUE_LED 37
 #define JOYY_CHANNEL 4
 #define JOYX_CHANNEL 11
 #define SW1_CHANNEL 33
+#define SW2_CHANNEL 32
 #define	SERVO_CHANNEL 0
 //Lab 4 defines
 #define RATIO (250.0f) / (4095.0f) //conversion to amount of pixels on LCD
@@ -127,9 +130,22 @@ public:
 	 * using a 1-second timeout to prevent false triggering.
 	 *
 	 * @param dig_input Reference variable to store the button state.
+	 * #param button_num stores button channel number
 	 * @returns true if succeeded.
 	 */
-	bool get_button(int &dig_input);
+	bool get_button_SW1(int &dig_input, int button_num);
+
+	/**
+	 * @brief Reads and debounces a digital button input.
+	 *
+	 * Reads a digital input channel and applies software debouncing
+	 * using a 1-second timeout to prevent false triggering.
+	 *
+	 * @param dig_input Reference variable to store the button state.
+	 * #param button_num stores button channel number
+	 * @returns true if succeeded.
+	 */
+	bool get_button_SW2(int& dig_input, int button_num);
 
 	/**
 	* @brief Getter function for the last channel recorded.

@@ -417,7 +417,7 @@ void lab3()
                     continue;
                 }
 
-                if (!cc.get_button(state))
+                if (!cc.get_button_SW1(state, SW1_CHANNEL))
                 {
                     continue;
                 }
@@ -483,7 +483,7 @@ void lab3()
 ////////////////////////////////////////////////////////////////
 void lab4()
 {
-    CSketch etch;
+    CSketch etch(Size(WINDOW_SIZE, WINDOW_SIZE));
     etch.run('q');
     exit(0);
 

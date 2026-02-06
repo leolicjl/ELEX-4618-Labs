@@ -199,14 +199,14 @@ bool CControl::get_analog(int &x, int &y)
     return true;
 }
 
-bool CControl::get_button(int &dig_input)
+bool CControl::get_button_SW1(int &dig_input, int button_num)
 {
     static int stable = 1;
     static int last_state = 1;
     static double last_time = 0;
 
     int state;
-    if (!get_data(DIGITAL, SW1_CHANNEL, state))
+    if (!get_data(DIGITAL, button_num, state))
         return false;
 
     double current_time = cv::getTickCount();
@@ -224,6 +224,32 @@ bool CControl::get_button(int &dig_input)
     _channel_x = _last_channel;
     return true;
 }
+
+bool CControl::get_button_SW2(int& dig_input, int button_num)
+{
+    static int stable = 1;
+    static int last_state = 1;
+    static double last_time = 0;
+
+    int state;
+    if (!get_data(DIGITAL, button_num, state))
+        return false;
+
+    double current_time = cv::getTickCount();
+
+    if (state != last_state)
+    {
+        last_state = state;
+        last_time = current_time;
+    }
+
+    if ((current_time - last_time) / cv::getTickFrequency() >= 0.003)
+        stable = last_state;
+
+    dig_input = stable;
+    return true;
+}
+
 int CControl::get_last_channel(void)
 {
     return _last_channel;
