@@ -13,34 +13,78 @@ Description: Header file for CSketch.cpp
 
 using namespace cv;
 
+/**
+* @class CSketch
+* @brief Creates an etch-a-sketch game
+*
+* Allows the joystick to control the coordinates on the screen
+* Button 1 to change the color, button 2 to clear the screen
+*
+*
+* @author Leo Li A01412091
+*/
 class CSketch : public CBase4618
 {
 private:
-	int _joystick_x, _joystick_y, _lcd_x, _lcd_y;
-	int _state_SW1 = 0;
-	int _last_state_SW1 = 1;
-	int _state_SW2 = 0;
-	int _last_state_SW2 = 1;
-	string _color_text = "BLUE";
-	Point _prev_point = Point(-1, -1);
+	int _joystick_x, _joystick_y, _lcd_x, _lcd_y; ///< joystick x and y, converted lcd x y coordinates
+	int _state_SW1 = 0; ///< stores current button 1 state
+	int _last_state_SW1 = 1; ///< stores last button 1 state
+	int _state_SW2 = 0; ///< stores current button 2 state
+	int _last_state_SW2 = 1; ///< stores last button 2 state 
+	string _color_text = "BLUE"; ///<  stores name of color displayed on window
+	Point _prev_point = Point(-1, -1); ///< stores previous point
 
-	Scalar _colors[3] = { Scalar(255,0,0), Scalar(0,255,0),  Scalar(0,0,255) };
+	Scalar _colors[3] = { Scalar(255,0,0), Scalar(0,255,0),  Scalar(0,0,255) }; ///< array holding Blue, red, green
 	
-	int _color_index = 0;
-	int _prev_color = 0;
-	Scalar _current_color = _colors[_color_index];
+	int _color_index = 0; ///< index for the _colors list
+	int _prev_color = 0; ///< stores previous color
+	Scalar _current_color = _colors[_color_index]; ///< stores current color
 
-	const float _center_x = 2060.0f;
-	const float _center_y = 1995.0f;
+	const float _center_x = 2060.0f; ///< defines joystick x at rest
+	const float _center_y = 1995.0f; ///< defines joystick y at rest
 public:
 
+	/**
+	* @brief Default constructor
+	* @param canvas_size reference variable
+	*/
 	CSketch(Size &canvas_size);
+
+	/**
+	* @brief Destructor
+	*
+	* Cleans up the CSketch object
+	*/
 	~CSketch();
 	
+	/**
+	 * @brief Initializes the gpio actions
+	 *
+	 * overrides to virtual in CBase4618
+	 *
+	 * @param none
+	 * @return none
+	 */
 	void gpio() override;
 
+	/**
+	 * @brief Initializes the update actions
+	 *
+	 * overrides to virtual in CBase4618
+	 *
+	 * @param none
+	 * @return none
+	 */
 	void update() override;
 
+	/**
+	 * @brief Initializes the draw actions
+	 *
+	 * overrides to virtual in CBase4618
+	 *
+	 * @param none
+	 * @return none
+	 */
 	void draw() override;
 };
 
