@@ -10,7 +10,7 @@
 // Add simple GUI elements
 #define CVUI_DISABLE_COMPILATION_NOTICES
 #define CVUI_IMPLEMENTATION
-#include "cvui.h"
+//#include "cvui.h" // its in CBase4618.h
 
 #include <string>
 #include <iostream>
@@ -23,6 +23,7 @@
 
 // Must include Windows.h after Winsock2.h, so Serial must be included after Client/Server
 #include "Serial.h" 
+#include "CSketch.h"
 #include "CControl.h"
 
 #define CANVAS_NAME "Display Image"
@@ -482,84 +483,9 @@ void lab3()
 ////////////////////////////////////////////////////////////////
 void lab4()
 {
-    using namespace cv;
-    int joystick_x, joystick_y, lcd_x, lcd_y;
-    int state = 0;
-    int last_State = 1;
-
-    Scalar colors[] = { Scalar(255,0,0), Scalar(0,255,0),  Scalar(0,0,255) };
-    int colorIndex = 0;
-    Scalar currentColor = colors[colorIndex];
-
-    CControl cc;
-
-    cc.init_com();
-
-    Mat canvas(250, 250, CV_8UC3, Scalar(255,255,255));
-
-    // initialize GUI system
-    cvui::init("Etch-A-sketch");
-
-    cv::Point gui_position;
-    gui_position = cv::Point(10, 2);
-     
-    cvui::window(canvas, gui_position.x, gui_position.y, 120, 40, "Etch-A-Sketch");
-    
-    Point prev_point(-1, -1);
-
-    while (true)
-    {
-        cc.ensure_connected();
-
-        if (!cc.is_connected())
-        {
-            Sleep(50);
-            continue;
-        }
-
-        if (cvui::button(canvas, 20, 40, 200, 30, "Exit"))
-            break;
-
-        if (!cc.get_analog(joystick_x, joystick_y))
-        {
-            Sleep(1);
-        }
-
-        if (cc.get_button(state))
-        {
-
-            if (last_State == 1 && state == 0)
-            {
-                if (colorIndex < 2)
-                    colorIndex++;
-                else
-                    colorIndex = 0;
-
-                currentColor = colors[colorIndex];
-            }
-
-            last_State = state;
-
-        }
-
-        lcd_x = RATIO * joystick_x;
-        lcd_y = RATIO * joystick_y;
-
-        Point current_Point(lcd_x, lcd_y);
-
-        if (prev_point.x == -1) {
-            prev_point = current_Point;                 
-        }
-        else {
-            line(canvas, prev_point, current_Point, currentColor, 1, LINE_AA);
-            prev_point = current_Point; 
-        }
-
-        gui_position = Point(12, 25);
-        cvui::text(canvas, gui_position.x, gui_position.y, "Color = " + to_string(colorIndex));
-        cvui::update();
-        imshow("Etch-A-Sketch", canvas);
-    }
+    CSketch etch;
+    etch.run('q');
+    exit(0);
 
 }
 ////////////////////////////////////////////////////////////////
