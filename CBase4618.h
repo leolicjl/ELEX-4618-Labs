@@ -30,9 +30,10 @@ protected:
 	CControl cc; ///< CControl class object
 	Mat _canvas; ///< Mat object
 	bool _quit = false; ///< stores game quit
-	double _fps = 0.0;
-	double _dt = 0;
+	double _fps = 0.0; ///<stores fps
+	double _dt = 0; ///<change in time it took to run
 	const chrono::milliseconds frame_duration = chrono::milliseconds(1000 / TARGET_FPS); ///< fixed frame rate cal
+	double _fps_array[10] = {}; ///stores 10 fps values for averaging
 
 	/**
 	 * @brief Function if user wants to quit
@@ -85,6 +86,7 @@ public:
 	/**
 	 * @brief quits if q is pressed
 	 *
+	 * includes timing and frame locking
 	 *
 	 * @param user_quit = 'q' , string window_name
 	 * @return true

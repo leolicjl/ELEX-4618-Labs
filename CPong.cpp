@@ -81,6 +81,21 @@ void CPong::update()
 
 	}
 
+	_l_paddle_tl = Point(0, _ball.y - 50);
+	_l_paddle_br = Point(20, _ball.y + 50);
+
+	if ((_ball.x - _ball_radius) <= _l_paddle_br.x)
+	{
+		_ball.x = _ball_radius + _l_paddle_br.x;
+		_ball_invert_x *= -1.0f;
+	}
+
+	if ((_ball.x + _ball_radius) >= _r_paddle_tl.x && _ball_invert_x > 0 && (_ball.y >= _r_paddle_tl.y && _ball.y <= _r_paddle_br.y))
+	{
+		_ball.x = _r_paddle_tl.x - _ball_radius;
+		_ball_invert_x *= -1.0f;
+	}
+
 	if (_last_state_SW1 == 1 && _state_SW1 == 0)
 	{
 		reset_ui();
@@ -103,7 +118,7 @@ void CPong::draw()
 	{
 		putText(_canvas, "GAME OVER", Point(_canvas.cols / 2 - 150, 100), FONT_HERSHEY_SIMPLEX, 2.0, Scalar(255, 255, 255), 4);
 	}
-	cout << "cleared" << endl;
+
 	line(_canvas, Point(_canvas.cols / 2, 0), Point(_canvas.cols / 2, 600), Scalar(255, 255, 255), LINE_THICKNESS, LINE_AA);
 
 	sprintf(_buffer, "Pong (FPS = %.6f)", _fps);

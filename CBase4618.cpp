@@ -37,11 +37,24 @@ bool CBase4618::run(char user_quit, string window_name)
 		_dt = std::chrono::duration<double>(now - last_frame).count();
 
 		if (_dt > 0.0)
+		{
+			
+			for (int i = 9; i > 0; i--)
+			{
+				_fps_array[i] = _fps_array[i - 1];
+			}
 			_fps = 1.0 / _dt;
+			_fps_array[0] = _fps;
+			double sum = 0;
+			for (int i = 0; i < 9; i++)
+				sum += _fps_array[i];
+
+			_fps = sum / 10;
+
+		}
 
 		last_frame = now;
-		
-		//if under 30fps, move this before sleep until so its part of framework
+
 		int key = waitKey(1);
 		if (key == user_quit)
 			_quit = true;
