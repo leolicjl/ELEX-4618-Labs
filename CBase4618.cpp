@@ -34,10 +34,10 @@ bool CBase4618::run(char user_quit, string window_name)
 		draw();
 
 		auto now = chrono::steady_clock::now();
-		double dt = std::chrono::duration<double>(now - last_frame).count();
+		_dt = std::chrono::duration<double>(now - last_frame).count();
 
-		if (dt > 0.0)
-			_fps = 1.0 / dt;
+		if (_dt > 0.0)
+			_fps = 1.0 / _dt;
 
 		last_frame = now;
 		

@@ -26,10 +26,23 @@ private:
 	int _comp_score = 0;
 	char _buffer[64];
 
-	double _ball_radius = 50.0;
-	double _ball_speed = 200.0;
+	double _ball_radius = 15.0;
+	double _ball_speed = 250.0f;
+	Point _ball = Point(1300/2, 600/2);
+	float _ball_invert_x = 1;
+	float _ball_invert_y = -1;
+
+	Point _l_paddle_tl = Point(0, 250);
+	Point _l_paddle_br = Point(20, 350);
+	Point _r_paddle_tl = Point(1280, 250);
+	Point _r_paddle_br = Point(1300, 350);
+	float _r_paddle_y = 250.0f;
 
 public:
+
+	enum GameState { PLAYING, GAME_OVER };
+
+	GameState _state = PLAYING;
 
 	/**
 	* @brief Default constructor
@@ -73,6 +86,9 @@ public:
 	 * @return none
 	 */
 	void draw() override;
+
+	void reset_ui(); 
+
 
 };
 

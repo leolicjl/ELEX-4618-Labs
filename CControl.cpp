@@ -157,7 +157,7 @@ bool CControl::get_data(int type, int channel, int &result)
     buff[0] = 0;
     // Read 1 byte and if an End Of Line then exit loop
 // Timeout after 1 second, if debugging step by step this will cause you to exit the loop
-    while (buff[0] != '\n' && (cv::getTickCount() - start_time) / cv::getTickFrequency() < 1.0)
+    while (buff[0] != '\n' && (cv::getTickCount() - start_time) / cv::getTickFrequency() < 0.03)
     {
         if (_com.read(buff, 1) > 0)
         {
@@ -172,7 +172,7 @@ bool CControl::get_data(int type, int channel, int &result)
     _last_channel = channel;
     result = stoi(rx_str.substr(6));
     //printf("\nRX: %s", rx_str.c_str());
-    cv::waitKey(1);
+    //cv::waitKey(1);
     return true;
 }
 

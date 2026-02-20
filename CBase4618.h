@@ -31,6 +31,7 @@ protected:
 	Mat _canvas; ///< Mat object
 	bool _quit = false; ///< stores game quit
 	double _fps = 0.0;
+	double _dt = 0;
 	const chrono::milliseconds frame_duration = chrono::milliseconds(1000 / TARGET_FPS); ///< fixed frame rate cal
 
 	/**
