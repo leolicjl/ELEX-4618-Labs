@@ -25,6 +25,7 @@
 #include "Serial.h" 
 #include "CSketch.h"
 #include "CControl.h"
+#include "CPong.h"
 
 #define CANVAS_NAME "Display Image"
 
@@ -486,15 +487,18 @@ void lab3()
 void lab4()
 {
     CSketch etch(Size(WINDOW_SIZE, WINDOW_SIZE));
-    etch.run('q');
+    etch.run('q', "Etch-A-Sketch");
     exit(0);
 
 }
 ////////////////////////////////////////////////////////////////
 // Lab 5
-////////////////////////////////////////////////////////////////
+//////////////////////////////////////// ////////////////////////
 void lab5()
 {
+    CPong pong(Size(1300, 600));
+    pong.run('q', "Pong");
+    exit(0);
 }
 
 ////////////////////////////////////////////////////////////////

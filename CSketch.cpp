@@ -3,7 +3,7 @@ Filename: CSketch.cpp
 Date: January 29, 2026
 Author: Leo Li
 Set: 3T
-Description: 
+Description: Etch A Sketch Lab
 */
 
 #include "stdafx.h"
@@ -15,7 +15,7 @@ CSketch::CSketch(Size &canvas_size)
 {
 	cc.init_com();
 	_canvas = Mat(canvas_size, CV_8UC3, Scalar(0,0,0));
-	cvui::init("Etch-A-Sketch");
+	cvui::init(_etch_window);
 	cvui::text(_canvas, 12, 10, "Color = " + _color_text);
 	cc.set_data(cc.DIGITAL, BLUE_LED, 1);
 	Sleep(2);

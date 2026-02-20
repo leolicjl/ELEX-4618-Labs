@@ -17,25 +17,41 @@ CBase4618::~CBase4618()
 {
 }
 
-bool CBase4618::run(char user_quit)
+bool CBase4618::run(char user_quit, string window_name)
 {
 	_quit = false;
 
+	auto next_frame = chrono::steady_clock::now();
+	auto last_frame = next_frame;
+
+
 	while (!_quit)
 	{
+		next_frame += frame_duration;
+
 		gpio();
 		update();
 		draw();
 
-		int key = waitKey(1);
+		auto now = chrono::steady_clock::now();
+		double dt = std::chrono::duration<double>(now - last_frame).count();
+
+		if (dt > 0.0)
+			_fps = 1.0 / dt;
+
+		last_frame = now;
 		
+		//if under 30fps, move this before sleep until so its part of framework
+		int key = waitKey(1);
 		if (key == user_quit)
 			_quit = true;
 
-		if (cv::getWindowProperty("Etch-A-Sketch", WND_PROP_VISIBLE) < 1)
+		if (cv::getWindowProperty(window_name, WND_PROP_VISIBLE) < 1)
 			_quit = true;
+
+		this_thread::sleep_until(next_frame);
 	}
 
-	cv::destroyWindow("Etch-A-Sketch");
+	cv::destroyWindow(window_name);
 	return true;
 }

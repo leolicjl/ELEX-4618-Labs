@@ -29,6 +29,7 @@ using namespace cv;
 class CSketch : public CBase4618
 {
 private:
+	string _etch_window = "Etch-A-Sketch";
 	Point _joystick; ///< stores coordinates of joystick
 	Point _lcd; ///<stores coordinates of lcd
 	Point _accel; ///<stores coordinates of accelerometer

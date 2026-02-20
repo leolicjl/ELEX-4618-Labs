@@ -6,8 +6,11 @@ Set: 3T
 Description: Header file for CBase4618.cpp
 */
 #pragma once
+#define TARGET_FPS 30
 #include "CControl.h"
 #include "cvui.h"
+#include <chrono>
+#include <thread>
 
 
 using namespace cv;
@@ -27,6 +30,8 @@ protected:
 	CControl cc; ///< CControl class object
 	Mat _canvas; ///< Mat object
 	bool _quit = false; ///< stores game quit
+	double _fps = 0.0;
+	const chrono::milliseconds frame_duration = chrono::milliseconds(1000 / TARGET_FPS); ///< fixed frame rate cal
 
 	/**
 	 * @brief Function if user wants to quit
@@ -76,7 +81,15 @@ public:
 	 */
 	virtual void draw() = 0;
 
-	bool run(char user_quit = 'q');
+	/**
+	 * @brief quits if q is pressed
+	 *
+	 *
+	 * @param user_quit = 'q' , string window_name
+	 * @return true
+	 */
+	bool run(char user_quit = 'q', string window_name = "");
+
 
 };
 
