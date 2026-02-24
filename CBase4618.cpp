@@ -3,7 +3,8 @@ Filename: CBase4618.cpp
 Date: February 5, 2026
 Author: Leo Li
 Set: 3T
-Description: 
+Description: Base class in which all labs will inherit from
+Notes: imshow() is already called here for safety.
 */
 
 #include "stdafx.h"
