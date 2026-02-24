@@ -165,14 +165,26 @@ bool CControl::get_data(int type, int channel, int &result)
         }
     }
 
-    // If we timed out or got nothing, fail
-    if (rx_str.empty() || rx_str.find('\n') == std::string::npos)
+    size_t nl = rx_str.find('\n');
+    if (rx_str.empty() || nl == std::string::npos)
         return false;
 
+    rx_str = rx_str.substr(0, nl);
+    // Parse the integer after the last space
+    size_t last_space = rx_str.find_last_of(' ');
+    if (last_space == std::string::npos || last_space + 1 >= rx_str.size())
+        return false;
+
+    try
+    {
+        result = std::stoi(rx_str.substr(last_space + 1));
+    }
+    catch (...)
+    {
+        return false;
+    }
+
     _last_channel = channel;
-    result = stoi(rx_str.substr(6));
-    //printf("\nRX: %s", rx_str.c_str());
-    //cv::waitKey(1);
     return true;
 }
 

@@ -37,6 +37,12 @@ void CPong::update()
 	if (!cc.is_connected())
 		return;
 
+	if (_last_state_SW1 == 1 && _state_SW1 == 0)
+	{
+		reset_ui();
+	}
+	_last_state_SW1 = _state_SW1;
+
 	if (_p1_score == 5 || _comp_score == 5)
 	{
 		_state = GAME_OVER;
@@ -44,6 +50,14 @@ void CPong::update()
 
 	if (_state == GAME_OVER)
 		return;
+
+	if (_last_state_SW1 == 1 && _state_SW1 == 0)
+	{
+		reset_ui();
+	}
+
+
+	_last_state_SW1 = _state_SW1;
 
 	cc.get_analog(_joystick, _accel);
 
@@ -96,15 +110,6 @@ void CPong::update()
 		_ball_invert_x *= -1.0f;
 	}
 
-	if (_last_state_SW1 == 1 && _state_SW1 == 0)
-	{
-		reset_ui();
-	}
-
-
-	_last_state_SW1 = _state_SW1;
-
-
 }
 
 
@@ -147,7 +152,7 @@ void CPong::draw()
 
 
 	cvui::update();
-	imshow("Pong", _canvas);
+	//imshow("Pong", _canvas);
 
 }
 

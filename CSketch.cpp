@@ -182,6 +182,5 @@ void CSketch::draw()
 		_prev_color = _color_index;
 	}
 	cvui::update();
-	imshow("Etch-A-Sketch", _canvas);
 
 }

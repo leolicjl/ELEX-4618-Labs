@@ -11,6 +11,8 @@ Description: Header file for CBase4618.cpp
 #include "cvui.h"
 #include <chrono>
 #include <thread>
+#include <mutex>
+#include <atomic>
 
 
 using namespace cv;
@@ -29,7 +31,12 @@ class CBase4618 {
 protected:
 	CControl cc; ///< CControl class object
 	Mat _canvas; ///< Mat object
-	bool _quit = false; ///< stores game quit
+
+	atomic<bool> _quit{ false };
+	mutex _mtx;
+	thread _updateThread;
+	thread _drawThread;
+
 	double _fps = 0.0; ///<stores fps
 	double _dt = 0; ///<change in time it took to run
 	const chrono::milliseconds frame_duration = chrono::milliseconds(1000 / TARGET_FPS); ///< fixed frame rate cal
@@ -41,7 +48,8 @@ protected:
 	 * @param _quit initialized as true
 	 * @return none
 	 */
-	void request_quit() { _quit = true; }
+	void request_quit() { _quit.store(true); }
+
 
 public:
 	/**
@@ -56,6 +64,8 @@ public:
 	*/
 	~CBase4618();
 
+	void update_thread();
+	void draw_thread(char user_quit, string window_name);
 	/**
 	 * @brief Performs read and write processes to interact with the microcontroller
 	 *
