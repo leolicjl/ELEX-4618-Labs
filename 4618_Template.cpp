@@ -507,7 +507,7 @@ void lab5()
 ////////////////////////////////////////////////////////////////
 void lab6()
 {
-    CSpaceInvadersGame spaceInvader(Size(1300, 600));
+    CSpaceInvadersGame spaceInvader(Size(1000, 600));
     spaceInvader.run('q', "Space Invaders");
     exit(0);
 

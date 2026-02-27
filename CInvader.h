@@ -6,7 +6,13 @@ Set: 3T
 Description: header file for CInvader.cpp
 */
 #pragma once
-class CInvader
+#include "CGameObject.h"
+
+class CInvader : public CGameObject
 {
+public:
+	CInvader();
+	CInvader(Point2f start_pos);
+	~CInvader();
 };
 

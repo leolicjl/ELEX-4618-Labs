@@ -8,10 +8,16 @@ Description: header file for CSpaceInvadersGame.cpp
 #pragma once
 #include "CBase4618.h"
 #include "CInvader.h"
+#include "CShip.h"
+#include "CMissle.h"
 
 class CSpaceInvadersGame : public CBase4618
 {
 private:
+	CShip cs;
+	CInvader ci;
+	vector<CInvader> _invaders_vec;
+	vector<CMissle> _missles_vec;
 	int _state_SW1 = 0; ///< stores current button 1 state
 	int _state_SW2 = 0; ///< stores current button 2 state
 	int _last_state_SW1 = 1; ///<stores last button 1 state
@@ -21,7 +27,14 @@ private:
 	Point _joystick; ///< stores coordinates of joystick
 	Point2f _joy_percent; ///<stores coordinates of joystik in percentage
 	Point _accel; ///<accelerometer not used; placeholder
-	vector<CInvader> _invaders_vec;
+	int _score = 0;
+	int _ship_lives = 3;
+	bool _game_over = false;
+	float _invader_speed = 60.0f;
+	int _invader_dir = 1;
+
+	std::vector<CMissle> _enemy_missiles;
+	std::chrono::steady_clock::time_point _last_enemy_fire = std::chrono::steady_clock::now();
 
 public:
 

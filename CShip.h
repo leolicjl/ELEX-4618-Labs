@@ -6,7 +6,12 @@ Set: 3T
 Description: header file for CShip.cpp
 */
 #pragma once
-class CShip
+#include "CGameObject.h"
+
+class CShip : public CGameObject
 {
+public:
+	CShip();
+	~CShip();
 };
 

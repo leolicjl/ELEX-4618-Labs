@@ -6,7 +6,12 @@ Set: 3T
 Description: Header File for CMissle.cpp
 */
 #pragma once
-class CMissle
+#include "CGameObject.h"
+
+class CMissle : public CGameObject
 {
+public:
+	CMissle(Point2f pos, Point2f vel);
+	~CMissle();
 };
 
