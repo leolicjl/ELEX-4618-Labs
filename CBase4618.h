@@ -35,12 +35,12 @@ protected:
 	atomic<bool> _quit{ false }; ///< Thread-safe flag to signal game loop to quit
 	mutex _mtx; ///< Mutex used to protect shared resources between threads
 	thread _updateThread; ///< Thread responsible for running the update loop
-	thread _drawThread; ///< Thread responsible for running the draw loop
+	thread _drawThread;
 
 	double _fps = 0.0; ///<stores fps
 	double _dt = 0; ///<change in time it took to run
 	const chrono::milliseconds frame_duration = chrono::milliseconds(1000 / TARGET_FPS); ///< fixed frame rate cal
-	double _fps_array[10] = {}; ///stores 10 fps values for averaging
+	double _fps_array[10] = {}; ///<stores 10 fps values for averaging
 
 	/**
 	 * @brief Function if user wants to quit
@@ -72,7 +72,7 @@ public:
 	 *
 	 * @return none
 	 */
-	//void update_thread();
+	void update_thread();
 
 	/**
 	 * @brief Function executed by the draw thread.
@@ -84,7 +84,7 @@ public:
 	 * @param window_name Name of the OpenCV window used for display
 	 * @return none
 	 */
-	//void draw_thread();
+	void draw_thread(char user_quit, string window_name);
 
 	/**
 	 * @brief Performs read and write processes to interact with the microcontroller

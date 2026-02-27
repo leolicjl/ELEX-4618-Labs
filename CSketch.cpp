@@ -182,7 +182,7 @@ void CSketch::draw()
 		cvui::text(_canvas, 12, 10, "Color = " + _color_text);
 		_prev_color = _color_index;
 	}
-	imshow("Etch-A-Sketch", _canvas);
+	//imshow("Etch-A-Sketch", _canvas);
 	cvui::update();
 
 }
