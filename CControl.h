@@ -30,7 +30,7 @@ Description: Header file for CControl.cpp
 using namespace std;
 
 /**
-* @class CControl
+*
 * @brief PC-side interfacce for serial communication with the embedded system. 
 * 
 * Allows PC based system access to GPIO w/ analog,

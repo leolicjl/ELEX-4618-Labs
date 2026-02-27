@@ -124,7 +124,7 @@ void CBase4618::draw_thread(char user_quit, string window_name)
 			lock_guard<mutex> lock(_mtx);
 			draw();
 		}
-		
+
 		imshow(window_name, _canvas);
 
 		int key = cv::waitKey(1);
@@ -151,6 +151,7 @@ bool CBase4618::run(char user_quit, string window_name)
 
 	_updateThread = thread(&CBase4618::update_thread, this);
 
+
 	while (!_quit.load())
 	{
 		{
@@ -170,7 +171,9 @@ bool CBase4618::run(char user_quit, string window_name)
 
 	if (_updateThread.joinable())
 		_updateThread.join();
-	
+
+
 	destroyWindow(window_name);
 	return true;
 }
+

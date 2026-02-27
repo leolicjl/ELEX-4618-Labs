@@ -17,8 +17,8 @@ Notes: 11 for joystick x, 4 for joystick y, 0-3 for servo, 5 6 7 accelerometer,
 static vector<string> list_candidate_ports()
 {
     vector<string> ports;
-    ports.reserve(256);
-    for (int i = 1; i <= 256; ++i)
+    ports.reserve(40);
+    for (int i = 1; i <= 40; ++i)
         ports.push_back("COM" + to_string(i));
     return ports;
 }
@@ -71,7 +71,7 @@ bool CControl::try_connect_on_port(const std::string& portName)
     if (!_com.open(winPort.c_str()))
         return false;
 
-    Sleep(200);
+    Sleep(30);
     _com.flush();
 
     if (!handshake_ok())
@@ -108,7 +108,7 @@ void CControl::ensure_connected()
     double elapsed = (now - last_scan_time) / cv::getTickFrequency();
 
     // If currently disconnected, don't rescan too often
-    const double scan_period = 0.10; // 100 ms (tune: 0.05 to 0.20)
+    const double scan_period = 1.0; // 100 ms (tune: 0.05 to 0.20)
 
     if (is_connected())
     {
@@ -127,6 +127,12 @@ void CControl::ensure_connected()
 
     last_scan_time = now;
 
+    if (!_active_port.empty())
+    {
+        if (try_connect_on_port(_active_port))
+            return;
+
+    }
     for (const auto& port : list_candidate_ports())
     {
         if (try_connect_on_port(port))

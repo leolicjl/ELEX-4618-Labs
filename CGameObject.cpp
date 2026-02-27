@@ -8,6 +8,16 @@ Description:
 #include "stdafx.h"
 #include "CGameObject.h"
 
+CGameObject::CGameObject()
+{
+
+}
+
+CGameObject::~CGameObject()
+{
+
+}
+
 void CGameObject::move()
 {
 	auto now = std::chrono::steady_clock::now();
@@ -43,16 +53,5 @@ bool CGameObject::collide_wall(Size board)
 void CGameObject::hit()
 {
 	_lives--;
-}
-
-void CGameObject::draw(Mat& im)
-{
-	Rect r;
-	r.x = _position.x;
-	r.y = _position.y;
-	r.width = _shape.width;
-	r.height = _shape.height;
-	rectangle(im, r,  Scalar(255, 255, 255), -1);
-
 }
 

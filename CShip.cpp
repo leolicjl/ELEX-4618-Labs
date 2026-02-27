@@ -18,3 +18,14 @@ CShip::CShip()
 CShip::~CShip()
 {
 }
+
+void CShip::draw(Mat& im)
+{
+	Rect r;
+	r.x = _position.x;
+	r.y = _position.y;
+	r.width = _shape.width;
+	r.height = _shape.height;
+	rectangle(im, r, Scalar(255, 255, 255), -1);
+
+}

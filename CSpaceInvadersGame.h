@@ -10,14 +10,22 @@ Description: header file for CSpaceInvadersGame.cpp
 #include "CInvader.h"
 #include "CShip.h"
 #include "CMissle.h"
+#include <random>
 
+/**
+*
+* @brief CSpaceInvadersGame class overrides CBase4618
+*
+* @author Leo Li A01412091
+*/
 class CSpaceInvadersGame : public CBase4618
 {
 private:
-	CShip cs;
-	CInvader ci;
-	vector<CInvader> _invaders_vec;
-	vector<CMissle> _missles_vec;
+	CShip cs; ///<object of CShip
+	CInvader ci; ///< object of CInvader
+	vector<CInvader> _invaders_vec; ///< vector filled with invaders
+	vector<CMissle> _missles_vec; ///< vector filled with ship missiles
+	vector<CMissle> _enemy_missles_vec; ///< vector filled with ship
 	int _state_SW1 = 0; ///< stores current button 1 state
 	int _state_SW2 = 0; ///< stores current button 2 state
 	int _last_state_SW1 = 1; ///<stores last button 1 state
@@ -27,20 +35,34 @@ private:
 	Point _joystick; ///< stores coordinates of joystick
 	Point2f _joy_percent; ///<stores coordinates of joystik in percentage
 	Point _accel; ///<accelerometer not used; placeholder
-	int _score = 0;
-	int _ship_lives = 3;
-	bool _game_over = false;
-	float _invader_speed = 60.0f;
-	int _invader_dir = 1;
+	int _score = 0; ///< stores game score
+	int _ship_lives = 3; ///< stores ships lives, initialized as 3
+	bool _game_over = false; ///< stores game state
+	float _invader_speed = 60.0f; ///< stores invader velocity
+	int _invader_dir = 1; ///< stores invader x direction
+	std::chrono::steady_clock::time_point _last_enemy_fire; ///< stores last enemy fire time
+	float _enemy_fire_cooldown = 0.8f; ///< cooldown for enemy missle fire
 
-	std::vector<CMissle> _enemy_missiles;
-	std::chrono::steady_clock::time_point _last_enemy_fire = std::chrono::steady_clock::now();
+	static const int INV_ROWS = 3;
+	bool _row_frame[INV_ROWS] = { false,false,false };
+	std::chrono::steady_clock::time_point _row_last_toggle[INV_ROWS];
 
 public:
 
+	/**
+	 * @brief Default constructor.
+	 *
+	 * @param canvas size 
+	 * 
+	 */
 	CSpaceInvadersGame(Size& canvas_size);
 
+	/**
+	 * @brief Default destructor.
+	 *
+	 */
 	~CSpaceInvadersGame();
+
 	/**
 	 * @brief Initializes the gpio actions
 	 *
