@@ -26,6 +26,7 @@
 #include "CSketch.h"
 #include "CControl.h"
 #include "CPong.h"
+#include "CSpaceInvadersGame.h"
 
 #define CANVAS_NAME "Display Image"
 
@@ -506,6 +507,10 @@ void lab5()
 ////////////////////////////////////////////////////////////////
 void lab6()
 {
+    CSpaceInvadersGame spaceInvader(Size(1300, 600));
+    spaceInvader.run('q', "Space Invaders");
+    exit(0);
+
 }
 
 void print_menu()

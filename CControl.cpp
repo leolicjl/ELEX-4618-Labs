@@ -14,23 +14,23 @@ Notes: 11 for joystick x, 4 for joystick y, 0-3 for servo, 5 6 7 accelerometer,
 
 #include <windows.h>
 
-static std::vector<std::string> list_candidate_ports()
+static vector<string> list_candidate_ports()
 {
-    std::vector<std::string> ports;
+    vector<string> ports;
     ports.reserve(256);
     for (int i = 1; i <= 256; ++i)
-        ports.push_back("COM" + std::to_string(i));
+        ports.push_back("COM" + to_string(i));
     return ports;
 }
 
 // Win32 needs "\\\\.\\COM10" 
-static std::string normalize_windows_port_name(const std::string& port)
+static string normalize_windows_port_name(const string& port)
 {
     if (port.rfind("COM", 0) == 0)
     {
         try
         {
-            int n = std::stoi(port.substr(3));
+            int n = stoi(port.substr(3));
             if (n >= 10)
                 return "\\\\.\\" + port;
         }

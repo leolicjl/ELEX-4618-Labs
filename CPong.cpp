@@ -152,7 +152,7 @@ void CPong::draw()
 
 
 	cvui::update();
-	//imshow("Pong", _canvas);
+	imshow("Pong", _canvas);
 
 }
 

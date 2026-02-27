@@ -12,7 +12,7 @@ Description: Header file for CSketch.cpp
 #define LINE_THICKNESS 1
 #define ACCEL_CENTERX 3712
 #define ACCEL_CENTERY 2116
-#define ACCEL_MIN_SHAKE 300
+#define ACCEL_MIN_SHAKE 500
 
 using namespace cv;
 

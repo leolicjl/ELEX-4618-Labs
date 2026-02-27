@@ -96,6 +96,7 @@ void CSketch::update()
 
 	_last_state_SW1 = _state_SW1;
 
+
 	if (_last_state_SW2 == 1 && _state_SW2 == 0)
 	{
 		_canvas.setTo(Scalar(0, 0, 0));
@@ -181,6 +182,7 @@ void CSketch::draw()
 		cvui::text(_canvas, 12, 10, "Color = " + _color_text);
 		_prev_color = _color_index;
 	}
+	imshow("Etch-A-Sketch", _canvas);
 	cvui::update();
 
 }

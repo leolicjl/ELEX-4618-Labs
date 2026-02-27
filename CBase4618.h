@@ -72,7 +72,7 @@ public:
 	 *
 	 * @return none
 	 */
-	void update_thread();
+	//void update_thread();
 
 	/**
 	 * @brief Function executed by the draw thread.
@@ -84,7 +84,7 @@ public:
 	 * @param window_name Name of the OpenCV window used for display
 	 * @return none
 	 */
-	void draw_thread(char user_quit, string window_name);
+	//void draw_thread();
 
 	/**
 	 * @brief Performs read and write processes to interact with the microcontroller
